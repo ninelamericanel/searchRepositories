@@ -28,11 +28,11 @@ class View {
     viewAutocomplete(repository) {
         let autocompletedItem = this.createElement('li', 'search__item');
         autocompletedItem.innerHTML = `<p>${repository.name}</p>`;
-        autocompletedItem.addEventListener('click', () => this.viewListOfRepositories(repository))
+        autocompletedItem.addEventListener('click', () => this.viewRepository(repository))
         this.autocompleteBlock.append(autocompletedItem);
     }
 
-    viewListOfRepositories(repository) {
+    viewRepository(repository) {
         let repositoryItem = this.createElement('li', 'repositories__item');
 
         repositoryItem.innerHTML = `<div class="repositories__info">
@@ -49,9 +49,12 @@ class View {
         iconDelete.addEventListener('click', () => this.deleteRepository(repositoryItem));
 
         this.repositoriesList.append(repositoryItem);
+        this.input.value = '';
+        this.deleteAutocompletedNodes();
+
     }
 
-    deleteRepository (repository) {
+    deleteRepository(repository) {
         repository.remove();
     }
 
@@ -64,7 +67,7 @@ class View {
 class Search {
     constructor(view) {
         this.view = view;
-        this.view.input.addEventListener('input', this.debounce(this.searchRepositories.bind(this), 500))
+        this.view.input.addEventListener('input', this.debounce(this.searchRepositories.bind(this), 500));
     }
 
     async searchRepositories() {
