@@ -6,3 +6,12 @@ ul, li {
 li {
   list-style: none;
 }
+
+.repositories__item {
+  display: flex;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+}
