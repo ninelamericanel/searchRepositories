@@ -2,7 +2,9 @@ class View {
     constructor() {
         this.root = document.getElementById('root');
         this.searchBlock = this.createElement('div', 'search');
+        this.repositoriesBlock = this.createElement('div', 'repositories');
         this.root.append(this.searchBlock);
+        this.root.append(this.repositoriesBlock);
 
         this.input = this.createElement('input', 'search__input');
         this.searchBlock.append(this.input);
@@ -10,6 +12,8 @@ class View {
         this.autocompleteBlock = this.createElement('ul', 'search__autocomplete');
         this.searchBlock.append(this.autocompleteBlock);
 
+        this.repositoriesList = this.createElement('ul', 'repositories__list');
+        this.repositoriesBlock.append(this.repositoriesList);
     }
 
     createElement(tag, className) {
@@ -18,18 +22,29 @@ class View {
         return newElement;
     }
 
-    viewAutocomplete(name) {
+    viewAutocomplete(repository) {
         let autocompletedItem = this.createElement('li', 'search__item');
-        autocompletedItem.innerHTML = name;
-
+        autocompletedItem.innerHTML = repository.name;
+        autocompletedItem.addEventListener('click', () => this.viewRepositories(repository))
         this.autocompleteBlock.append(autocompletedItem);
+    }
+
+    viewRepositories(repository) {
+        let repositoryItem = this.createElement('li', 'repositories__item');
+
+        repositoryItem.innerHTML = `<p>Name: ${repository.name}</p>
+                        <p>Owner: ${repository.owner.login}</p>
+                        <p>Stars: ${repository.stargazers_count}</p>`
+
+        this.repositoriesList.append(repositoryItem);
+
+        console.log(repository, repository.name, repository.owner.login, repository.stargazers_count);
     }
 
     deleteAutocompletedNodes() {
         let autocompletedNodes = [...this.autocompleteBlock.childNodes];
-        autocompletedNodes.forEach(node => node.remove());
+         autocompletedNodes.forEach(node => node.remove());
     }
-
 }
 
 class Search {
@@ -41,10 +56,11 @@ class Search {
     async searchRepositories() {
         let value = this.view.input.value;
         if (value) {
+            if (this.view.autocompleteBlock.childNodes) this.view.deleteAutocompletedNodes();
             let response = await fetch(`https://api.github.com/search/repositories?q=${value}&per_page=5`);
             if (response.ok) {
                 let json = await response.json();
-                json.items.forEach(item => this.view.viewAutocomplete(item.name))
+                json.items.forEach(item => this.view.viewAutocomplete(item))
             } else {
                 return `Error ${response.status}`;
             }
