@@ -1,10 +1,13 @@
 class View {
     constructor() {
         this.root = document.getElementById('root');
+        this.wrapper = this.createElement('div', 'wrapper');
+        this.root.append(this.wrapper);
+
         this.searchBlock = this.createElement('div', 'search');
         this.repositoriesBlock = this.createElement('div', 'repositories');
-        this.root.append(this.searchBlock);
-        this.root.append(this.repositoriesBlock);
+        this.wrapper.append(this.searchBlock);
+        this.wrapper.append(this.repositoriesBlock);
 
         this.input = this.createElement('input', 'search__input');
         this.searchBlock.append(this.input);
@@ -24,7 +27,7 @@ class View {
 
     viewAutocomplete(repository) {
         let autocompletedItem = this.createElement('li', 'search__item');
-        autocompletedItem.innerHTML = repository.name;
+        autocompletedItem.innerHTML = `<p>${repository.name}</p>`;
         autocompletedItem.addEventListener('click', () => this.viewListOfRepositories(repository))
         this.autocompleteBlock.append(autocompletedItem);
     }
@@ -90,51 +93,3 @@ class Search {
 }
 
 new Search(new View());
-
-//
-// createElement('div', "search", '.root');
-// createElement('input', "search__input", '.search', 'text', 'Type to search...');
-//
-//
-// input.addEventListener('input', () => {
-//         let value = input.value;
-//         if (value) {
-//             getRepositories(value)
-//                 .then(result => createListOfAutocomplete(result.items));
-//         } else {
-//             createListOfAutocomplete();
-//         }
-//     }
-// );
-//
-// function createListOfAutocomplete(items) {
-//     if (items) {
-//         createElement('ul', 'search__autocomplete', '.search');
-//         items.forEach((item, i) => {
-//             let nodeElement = createElement('li', `search__item--${i}`, '.search__autocomplete')
-//             nodeElement.innerHTML = item.name;
-//         })
-//     } else {
-//         let list = document.querySelector('.search__autocomplete');
-//         list.remove()
-//     }
-// }
-//
-// function createListOfAddedRepositories() {
-//
-// }
-//
-//
-// async function getRepositories(text) {
-//     let response = await fetch(`https://api.github.com/search/repositories?q=${text}&per_page=5`);
-//     if (response.ok) {
-//         let json = await response.json();
-//         return json;
-//     } else {
-//         return `Error ${response.status}`;
-//     }
-// }
-//
-
-//
-//
