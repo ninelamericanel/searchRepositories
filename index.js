@@ -25,25 +25,36 @@ class View {
     viewAutocomplete(repository) {
         let autocompletedItem = this.createElement('li', 'search__item');
         autocompletedItem.innerHTML = repository.name;
-        autocompletedItem.addEventListener('click', () => this.viewRepositories(repository))
+        autocompletedItem.addEventListener('click', () => this.viewListOfRepositories(repository))
         this.autocompleteBlock.append(autocompletedItem);
     }
 
-    viewRepositories(repository) {
+    viewListOfRepositories(repository) {
         let repositoryItem = this.createElement('li', 'repositories__item');
 
-        repositoryItem.innerHTML = `<p>Name: ${repository.name}</p>
-                        <p>Owner: ${repository.owner.login}</p>
-                        <p>Stars: ${repository.stargazers_count}</p>`
+        repositoryItem.innerHTML = `<div class="repositories__info">
+                                      <p>Name: ${repository.name}</p>
+                                      <p>Owner: ${repository.owner.login}</p>
+                                      <p>Stars: ${repository.stargazers_count}</p>
+                                    </div>`
+
+        let iconDelete = this.createElement('button', 'repositories__icon');
+        repositoryItem.append(iconDelete);
+
+        iconDelete.innerHTML = `<img class="icon" src="icons/delete-icon.svg" alt="Delete favourite repository">`
+        iconDelete.type = 'button';
+        iconDelete.addEventListener('click', () => this.deleteRepository(repositoryItem));
 
         this.repositoriesList.append(repositoryItem);
+    }
 
-        console.log(repository, repository.name, repository.owner.login, repository.stargazers_count);
+    deleteRepository (repository) {
+        repository.remove();
     }
 
     deleteAutocompletedNodes() {
         let autocompletedNodes = [...this.autocompleteBlock.childNodes];
-         autocompletedNodes.forEach(node => node.remove());
+        autocompletedNodes.forEach(node => node.remove());
     }
 }
 
