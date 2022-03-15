@@ -25,8 +25,9 @@ class View {
         this.autocompleteBlock.append(autocompletedItem);
     }
 
-    hideAutocomplete() {
-        this.autocompleteBlock.removeChild();
+    deleteAutocompletedNodes() {
+        let autocompletedNodes = [...this.autocompleteBlock.childNodes];
+        autocompletedNodes.forEach(node => node.remove());
     }
 
 }
@@ -48,7 +49,7 @@ class Search {
                 return `Error ${response.status}`;
             }
         } else {
-            this.view.hideAutocomplete();
+            this.view.deleteAutocompletedNodes();
         }
     }
 
