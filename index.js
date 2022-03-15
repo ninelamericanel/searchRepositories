@@ -4,10 +4,11 @@ class View {
         this.searchBlock = this.createElement('div', 'search');
         this.root.append(this.searchBlock);
 
-        this.searchInput = this.createElement('input', 'search__input');
-        this.searchBlock.append(this.searchInput);
+        this.input = this.createElement('input', 'search__input');
+        this.searchBlock.append(this.input);
 
-
+        this.autocompleteBlock = this.createElement('ul', 'search__autocomplete');
+        this.searchBlock.append(this.autocompleteBlock);
 
     }
 
@@ -17,9 +18,50 @@ class View {
         return newElement;
     }
 
+    viewAutocomplete(name) {
+        let autocompletedItem = this.createElement('li', 'search__item');
+        autocompletedItem.innerHTML = name;
+
+        this.autocompleteBlock.append(autocompletedItem);
+    }
+
+    hideAutocomplete() {
+        this.autocompleteBlock.removeChild();
+    }
+
 }
 
-new View();
+class Search {
+    constructor(view) {
+        this.view = view;
+        this.view.input.addEventListener('input', this.searchRepositories.bind(this))
+    }
+
+    async searchRepositories() {
+        let value = this.view.input.value;
+        if (value) {
+            let response = await fetch(`https://api.github.com/search/repositories?q=${value}&per_page=5`);
+            if (response.ok) {
+                let json = await response.json();
+                json.items.forEach(item => this.view.viewAutocomplete(item.name))
+            } else {
+                return `Error ${response.status}`;
+            }
+        } else {
+            this.view.hideAutocomplete();
+        }
+    }
+
+    debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(fn.apply(this, args), delay);
+        }
+    }
+}
+
+new Search(new View());
 
 //
 // createElement('div', "search", '.root');
@@ -65,12 +107,6 @@ new View();
 //     }
 // }
 //
-// function debounce(fn, delay) {
-//     let timer;
-//     return function (...args) {
-//         if (timer) clearTimeout(timer);
-//         timer = setTimeout(fn.apply(this, args), delay);
-//     }
-// }
+
 //
 //
