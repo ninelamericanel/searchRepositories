@@ -25,6 +25,7 @@ body {
     border: 2px solid #5ce8ef;
     border-radius: 5px;
     outline-color: #5ce8ef;
+
 }
 
 .search__autocomplete {
@@ -36,27 +37,30 @@ body {
     height: 40px;
     padding: 5px;
     border-radius: 5px;
-
+    cursor: pointer;
     transition-duration: 300ms;
-    transition-property: background-color;
+    transition-property: background-color, font-weight;
 }
 
 .search__item:hover {
     background-color: #5ce8ef;
 }
 
-
-
+.search__item:hover p {
+    font-weight: 600;
+}
 
 .repositories {
-    width: 50%;
+    width: 100%;
     margin: 0 auto;
 }
 
 .repositories__item {
+    padding: 5px;
     display: flex;
-    width: 99%;
-    border: 1px solid black;
+    border: 2px solid #5ce8ef;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }
 
 .repositories__icon {
@@ -66,4 +70,9 @@ body {
 .icon {
     width: 40px;
     height: 40px;
+    transition-duration: 300ms;
+}
+
+.icon:hover {
+    transform: scale(1.2);
 }
