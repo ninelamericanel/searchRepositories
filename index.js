@@ -35,7 +35,7 @@ class View {
 class Search {
     constructor(view) {
         this.view = view;
-        this.view.input.addEventListener('input', this.searchRepositories.bind(this))
+        this.view.input.addEventListener('input', this.debounce(this.searchRepositories.bind(this), 500))
     }
 
     async searchRepositories() {
@@ -53,13 +53,13 @@ class Search {
         }
     }
 
-    debounce(fn, delay) {
-        let timer;
-        return function (...args) {
-            if (timer) clearTimeout(timer);
-            timer = setTimeout(fn.apply(this, args), delay);
-        }
-    }
+    debounce = (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+            if (timeout) clearTimeout(timeout);
+            timeout = setTimeout(() => func(...args), wait);
+        };
+    };
 }
 
 new Search(new View());
