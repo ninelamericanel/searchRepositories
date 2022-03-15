@@ -10,6 +10,7 @@ export class View {
         this.wrapper.append(this.repositoriesBlock);
 
         this.input = this.createElement('input', 'search__input');
+        this.input.placeholder = 'Type to search...'
         this.searchBlock.append(this.input);
 
         this.autocompleteBlock = this.createElement('ul', 'search__autocomplete');
